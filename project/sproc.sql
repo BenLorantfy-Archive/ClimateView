@@ -27,3 +27,34 @@ DELIMITER ;
 
 -- function to create users data table;
 -- parameter is userid or table name.
+
+DROP PROCEDURE IF EXISTS createUserTable;
+DELIMITER //
+CREATE PROCEDURE createUserTable(tblName VARCHAR(255))
+BEGIN
+    SET @tableName = tblName;
+    SET @q = CONCAT('
+        CREATE TABLE IF NOT EXISTS `' , @tableName, '` (
+		`StateCode` INT(11),
+		`YearMonth` INT(11),
+		`PCP` FLOAT,
+		`CDD` FLOAT,
+		`HDD` FLOAT,
+		-- Lowest month temperture
+		`TMIN` FLOAT,
+		-- Maximum month temperture in degrees celcius
+		`TMAX` FLOAT,
+		-- Average month temperture in degrees celcius
+		`TAVG` FLOAT,
+		-- Foreign keys
+		FOREIGN KEY (StateCode) REFERENCES State(StateCode),
+		FOREIGN KEY (YearMonth) REFERENCES YearMonth(YearMonth)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8
+    ');
+    PREPARE stmt FROM @q;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    -- and you're done. Table is created.
+    -- process it here if you like (INSERT etc)
+END //
+
