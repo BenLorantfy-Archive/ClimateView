@@ -49,30 +49,17 @@ App.PrecipitationChart = (function() {
 		chartType.xAxis.categories = time;
 		var chart = new Highcharts.Chart(chartType); 
 		
-		$( "#slider1" ).slider({
-			min: 2,
-			max: max_value,
-			animate: "fast",
-			slide: function(event, ui) {
-				startValue = ui.value;
-				newStartData = data.slice(endValue, ui.value);
-				newStartTime = time.slice(endValue, ui.value);
-				chartType.series[0].data  = newStartData;
-				chartType.xAxis.categories = newStartTime;
-				var chart = new Highcharts.Chart(chartType);
-			}
-		});
-		
 		$( "#slider2" ).slider({
 			min: 2,
 			max: max_value,
 			animate: "fast",
+			values: [2, max_value],
 			slide: function(event, ui) {
-				endValue = ui.value;
-				newEndData = data.slice(ui.value, startValue);
-				newEndTime = time.slice(ui.value, startValue);
-				chartType.series[0].data  = newEndData;
-				chartType.xAxis.categories = newEndTime;
+				endValue = ui.values[1];
+				startValue = ui.values[0];
+				chartType.series[0].data  = dataCDD.slice(startValue, endValue);
+				chartType.series[1].data  = dataHDD.slice(startValue, endValue);
+				chartType.xAxis.categories = time.slice(startValue, endValue);
 				var chart = new Highcharts.Chart(chartType);
 			}
 		});

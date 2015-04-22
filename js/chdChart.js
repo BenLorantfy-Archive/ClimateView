@@ -65,28 +65,17 @@ App.CHDaysChart = (function() {
 		chartType.xAxis.categories = time;
 		var chart = new Highcharts.Chart(chartType); 
 		
-		$( "#slider1" ).slider({
-			min: 2,
-			max: max_value,
-			animate: "fast",
-			slide: function(event, ui) {
-				startValue = ui.value;
-				chartType.series[0].data  = dataCDD.slice(endValue, ui.value);
-				chartType.series[1].data  = dataHDD.slice(endValue, ui.value);
-				chartType.xAxis.categories = time.slice(endValue, ui.value);
-				var chart = new Highcharts.Chart(chartType);
-			}
-		});
-		
 		$( "#slider2" ).slider({
 			min: 2,
 			max: max_value,
 			animate: "fast",
+			values: [2, max_value],
 			slide: function(event, ui) {
-				endValue = ui.value;
-				chartType.series[0].data  = dataCDD.slice(ui.value, startValue);
-				chartType.series[1].data  = dataHDD.slice(ui.value, startValue);
-				chartType.xAxis.categories = time.slice(ui.value, startValue);
+				endValue = ui.values[1];
+				startValue = ui.values[0];
+				chartType.series[0].data  = dataCDD.slice(startValue, endValue);
+				chartType.series[1].data  = dataHDD.slice(startValue, endValue);
+				chartType.xAxis.categories = time.slice(startValue, endValue);
 				var chart = new Highcharts.Chart(chartType);
 			}
 		});
