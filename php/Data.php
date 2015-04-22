@@ -153,4 +153,16 @@ class Data{
 		
 		return $valid;
 	}
+
+	public function getRegions(){
+		$regions = array();
+		$result = $this->db->query("SELECT * FROM State");
+
+		while($row = $result->fetch_assoc()){
+		    array_push($regions, array("code" => $row["StateCode"],"name" => $row["Name"]));
+		}
+		
+		return $regions;
+	}
 }
+
