@@ -1,12 +1,44 @@
 <?php
 class Users{
+	private $db;
+	public function __construct(){
+		$this->db = Connection::connect();
+	}
+	
 	public function login($request){
+		$success = false;
+		
+		//
+		// Get credentials from request
+		//
 		$username = $request->username;
 		$password = $request->password;
 		
-		// todo: authorize user and set session variables
+		//
+		// Check database for user
+		//
+		$query = $this->db->prepare("SELECT UserID,password FROM User WHERE Username = ? LIMIT 1");
+		if(!$query) throw new Exception($this->db->error);
+		if(!$query->bind_param("s",$username)) throw new Exception($this->db->error);
+		if(!$query->execute()) throw new Exception($this->db->error);
+		if(!$query->store_result()) throw new Exception($this->db->error);
 		
-		return true;	
+		if($query->num_rows == 1){
+			if(!$query->bind_result($id,$hashedPassword)) throw new Exception($this->db->error);
+			
+			//
+			// Check if the provided password matches the db password
+			//
+			$query->fetch();
+			if(password_verify($password,$hashedPassword)){
+				$_SESSION["id"] 	  = $id;
+				$_SESSION["username"] = $username;
+				$_SESSION["password"] = $password;
+				$success = true;
+			}
+		}	
+		
+		return $success;	
 	}
 	
 	public function requestAccount($request){
