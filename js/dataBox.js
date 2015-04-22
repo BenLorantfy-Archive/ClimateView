@@ -24,13 +24,16 @@ App.DataBox = function(){
 			$("#pageContainer").animate({ width:"70%", height:"100%", "border-radius":0 },900,"easeOutQuart");
 			setTimeout(function(){
 				$("#uploadBox").show();
-				$("#uploadBox").animate({ opacity:1 }, 300, "easeOutQuart");			
+				$("#uploadBox").animate({ opacity:1 }, 300, "easeOutQuart");	
+				$("#logoutContainer").show();
+				$("#logoutContainer").animate({ opacity:1 }, 300, "easeOutQuart");
 			}, 600)
 		}else{
 			$("#pageContainer").css("background-color","rgba(0,0,0," + 0.15 + ")");
 			$("#pageContainer").css("border","1px solid rgba(0,0,0," + 0.1 + ")");
 			$("#pageContainer").css({ width:"70%", height:"100%", "border-radius":0 });
 			$("#uploadBox").css("opacity",1).show();
+			$("#logoutContainer").css("opacity",1).show();
 			$("#title").css("opacity",1).show();
 		}
 	}
