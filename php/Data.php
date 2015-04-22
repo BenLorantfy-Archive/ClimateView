@@ -33,6 +33,8 @@ class Data{
 			$sql .= ' where statecode = ' . $stateCode;
 		}
 		
+		$sql .= ' ORDER BY yearmonth';
+		
 		$query = $this->db->prepare($sql);
 		
 		if(!$query) throw new Exception($this->db->error);
@@ -160,6 +162,25 @@ class Data{
 		
 		$endTime = date("Y-m-d H:i:s");
 		
+		$query = $this->db->prepare("SELECT MIN(YearMonth) FROM " . $tblName);
+		if(!$query) throw new Exception("prepare:" . $this->db->error);
+		if(!$query->execute()) throw new Exception("execute:" . $this->db->error);
+		if(!$query->store_result()) throw new Exception("store:" . $this->db->error);
+		if(!$query->bind_result($minYear)) throw new Exception($this->db->error);
+		$query->fetch();
+
+		$query = $this->db->prepare("SELECT MAX(YearMonth) FROM " . $tblName);
+		if(!$query) throw new Exception("prepare:" . $this->db->error);
+		if(!$query->execute()) throw new Exception("execute:" . $this->db->error);
+		if(!$query->store_result()) throw new Exception("store:" . $this->db->error);
+		if(!$query->bind_result($maxYear)) throw new Exception($this->db->error);
+		$query->fetch();
+		
+		$query = $this->db->prepare("INSERT INTO log VALUES (?,?,?,?,?)");
+		if(!$query) throw new Exception("prepare:" . $this->db->error);
+		if(!$query->bind_param("issss",$_SESSION["id"], $currentTime, $endTime, $minYear, $maxYear));
+		if(!$query->execute()) throw new Exception("execute:" . $this->db->error);
+	
 		return $valid;
 	}
 
