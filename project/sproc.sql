@@ -14,40 +14,34 @@
 USE ClimateView;
 DROP PROCEDURE IF EXISTS transformProc;
 DELIMITER //
-CREATE PROCEDURE transformProc(tblName VARCHAR(255), StateCode INT, YearMonth INT, PCP Float, CDD Float, HDD Float, TMIN Float, TMAX Float, TAVG Float)
+CREATE PROCEDURE transformProc(tblName VARCHAR(255), StateCode INT, inpYearMonth INT, PCP Float, CDD Float, HDD Float, TMIN Float, TMAX Float, TAVG Float)
 BEGIN
-	SET @tableName = tblName;
-	SET FOREIGN_KEY_CHECKS = 0;
-	-- convert fahrenheit to celsius
-	SET @celsiusTMIN = ((TMIN -32)*(5/9));
-	SET @celsiusTMAX = ((TMAX -32)*(5/9));
-	SET @celsiusTAVG = ((TAVG -32)*(5/9));
+	DECLARE celsiusTMIN INT;
+    DECLARE celsiusTMAX INT;
+    DECLARE celsiusTAVG INT;
+    DECLARE mmPCP INT;
+    DECLARE buf INT;
+    
+	SET celsiusTMIN := ((TMIN -32)*(5/9));
+	SET celsiusTMAX := ((TMAX -32)*(5/9));
+	SET celsiusTAVG := ((TAVG -32)*(5/9));
 	-- convert inches into mm
-	SET @mmPCP = PCP *  25.4;	
-	
-	SET @q = CONCAT('
-		INSERT INTO `' , @tableName, '` (
-			`StateCode`, `YearMonth`, `PCP`, `CDD`, `HDD`, `TMIN`, `TMAX`, `TAVG`) 
-			values  (`' , StateCode, '``' , YearMonth, '``' , @mmPCP, '``' , CDD, '`
-			`' , HDD, '``' , @celsiusTMIN, '``' , @celsiusTMAX, '``' , @celsiusTAVGS, '`
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8
-		');
-		PREPARE stmt FROM @q;
-		EXECUTE stmt;
+	SET mmPCP := PCP *  25.4;	
+    
+    SET buf := (SELECT MAX(yearMonth) FROM YearMonth WHERE YearMonth.YearMonth = inpYearMonth);
+    IF (buf IS NULL) THEN
+		SET @yearNum = (SELECT LEFT(inpYearMonth, 4));
+		SET @monthNum = (SELECT RIGHT(inpYearMonth, 2));
+		INSERT INTO YearMonth(YearMonth, Year, Month) 
+			VALUES (inpYearMonth, @yearNum, @monthNum);
+	END IF;
+    
+	SET @q = CONCAT('INSERT INTO ' , tblName, ' (StateCode, YearMonth, PCP, CDD, HDD, TMIN, TMAX, TAVG) values  (' , StateCode, ',' , inpYearMonth, ',' ,  mmPCP, ',' , CDD, ',' , HDD, ',' , celsiusTMIN, ',' , celsiusTMAX, ',' ,  celsiusTAVG, ')');
+	PREPARE stmt FROM @q;
+	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
-
-	SET @yearNum = (SELECT LEFT(YearMonth, 4));
-	SET @monthNum = (SELECT RIGHT(YearMonth, 2));
-	INSERT INTO YearMonth(Year, Month) 
-		VALUES (@yearNum, @monthNum);
-	
-
-SET FOREIGN_KEY_CHECKS = 1;	
 END //
 DELIMITER ;
-
-
-
 
 -- -----------------------------------------------------
 --		Create User sProc
