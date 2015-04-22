@@ -60,8 +60,10 @@ DELIMITER //
 CREATE PROCEDURE createUserTable(tblName VARCHAR(255))
 BEGIN
     SET @tableName = tblName;
+	SET @Z = CONCAT ('DROP TABLE IF EXISTS '  , @tableName,'' );
+	
     SET @q = CONCAT('
-        CREATE TABLE IF NOT EXISTS `' , @tableName, '` (
+        CREATE TABLE IF NOT EXISTS ' , @tableName, ' (
 		`StateCode` INT(11),
 		`YearMonth` INT(11),
 		-- Millimeters of precepitation 
@@ -80,6 +82,9 @@ BEGIN
 		FOREIGN KEY (YearMonth) REFERENCES YearMonth(YearMonth)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8
     ');
+	PREPARE stmt FROM @z;
+	EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
     PREPARE stmt FROM @q;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
