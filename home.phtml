@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<?php include("head.phtml"); ?>
+<?php 
+	include("head.phtml"); 
+	$data = new Data();
+	$data->getUserData(1);
+?>
 </head>
 <body>
 	<div class = "verticalCenter"></div>

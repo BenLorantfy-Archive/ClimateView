@@ -60,7 +60,7 @@ $App.DataBox = (function() {
 	//put the json data here
 	//************************
 	//************************
-	$.getJSON("data.json", function(json) {
+	$.getJSON(JSON, function(json) {
 		$.each(json, function(key, value) {
 			dataAVG.push(value.TAVG);
 			dataMIN.push(value.TMIN);
