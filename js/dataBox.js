@@ -26,9 +26,12 @@ App.DataBox = function(){
 			console.log(data);
 			switch(val){
 				case "precipitation":
+					var chart = new App.PrecipitationChart();
+					chart.start(data);
 					break;
 				case "days":
-				
+					var chart = new App.CHDaysChart();
+					chart.start(data);
 					break;
 				case "temperature":
 					var chart = new App.TemperatureChart();

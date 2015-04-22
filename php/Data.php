@@ -8,6 +8,11 @@ class Data{
 	}	
 		
 	private function generateData($user_id, $series, $stateCode){
+		if ($series == "")
+		{
+			return;
+		}
+		
 		$sql = 'SELECT statecode, yearmonth,';	
 		switch($series)
 		{
@@ -89,7 +94,7 @@ class Data{
 		$user_id = $_SESSION["id"];
 		$series = $request->series;
 
-		return $this->generateData($user_id, $series);
+		return $this->generateData($user_id, $series, "");
 	}
 	
 	private function createTable($tblName){

@@ -1,8 +1,8 @@
-$App.DataBox = (function() {					
+App.CHDaysChart = (function() {					
 	var CHDays = {
 		chart: {
-			renderTo: 'container',
-			type: 'column'
+			renderTo: 'chartRegion',
+			type: 'line'
 		},
 		title: {
 			text: 'Cooling Days/Heating Days'                 
@@ -27,12 +27,12 @@ $App.DataBox = (function() {
 				}
 		},
 		series: [{
-			"type": "column",
+			"type": "line",
 			"name": "CD",
 			"color": "#d92b00",
 			"stack": true
 			}, {
-				"type": "column",
+				"type": "line",
 					"name": "HD",
 					"color": "#51626d",
 					"stack": true
@@ -53,7 +53,7 @@ $App.DataBox = (function() {
 	//put the json data here
 	//************************
 	//************************
-	$.getJSON("data.json", function(json) {
+	this.start = function(json) {
 		$.each(json, function(key, value) {
 			dataCDD.push(value.CDD);
 			dataHDD.push(value.HDD);
@@ -90,5 +90,5 @@ $App.DataBox = (function() {
 				var chart = new Highcharts.Chart(chartType);
 			}
 		});
-	});					
+	};					
 });

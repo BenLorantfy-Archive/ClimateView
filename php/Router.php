@@ -74,7 +74,6 @@ class Router{
 					//
 					if(!empty($payload)){
 						$request = (object)array_merge((array)$request, (array)$payload);
-						var_dump($request);
 					}
 				}
 				

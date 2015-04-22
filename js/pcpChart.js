@@ -1,8 +1,8 @@
-App.DataBox = (function() {		
+App.PrecipitationChart = (function() {		
 	var Precipitation = {
 		chart: {
-			renderTo: 'container',
-			type: 'column'
+			renderTo: 'chartRegion',
+			type: 'line'
 		},
 		title: {
 			text: 'Precipitation'                 
@@ -31,7 +31,7 @@ App.DataBox = (function() {
 	var max_value;
 	var startValue = 0;
 	var endValue = 0;
-	var chartType = CHDays;
+	var chartType = Precipitation;
 	
 	
 	//************************
@@ -39,7 +39,7 @@ App.DataBox = (function() {
 	//put the json data here
 	//************************
 	//************************
-	$.getJSON("data.json", function(json) {
+	this.start = function(json) {
 		$.each(json, function(key, value) {
 			data.push(value.PCP);
 			time.push(value.YEARMONTH);	
@@ -76,5 +76,5 @@ App.DataBox = (function() {
 				var chart = new Highcharts.Chart(chartType);
 			}
 		});
-	});	
+	};	
 });
