@@ -63,6 +63,7 @@ BEGIN
 	SET @Z = CONCAT ('DROP TABLE IF EXISTS '  , @tableName,'' );
 	
     SET @q = CONCAT('
+        CREATE TABLE IF NOT EXISTS ' , @tableName, ' (
 		`StateCode` INT(11),
 		`YearMonth` INT(11),
 		-- Millimeters of precepitation 
