@@ -28,17 +28,17 @@ $App.DataBox = (function() {
 		},
 		series: [{
 			"type": "column",
-			"name": "Min",
+			"name": "AVG",
 			"color": "#ff9900",
 			"stack": true
 		},
 		{"type": "column",
-			"name": "Min",
+			"name": "MIN",
 			"color": "#d92b00",
 			"stack": true
 			}, {
 				"type": "column",
-					"name": "Max",
+					"name": "MAX",
 					"color": "#51626d",
 					"stack": true
 			}
