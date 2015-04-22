@@ -17,11 +17,15 @@ html,body{
 	outline: none;
 }
 
+/*
+ * ================================================
+ * 						Common
+ * ================================================
+ */
 video {
 	position: fixed; right: 0; bottom: 0;
 	min-width: 100%; min-height: 100%;
 	width: auto; height: auto; z-index: -100;
-/* 	background: url(polina.jpg) no-repeat; */
 	background-size: cover;
 }
 
@@ -45,14 +49,12 @@ input[type=button]{
 	text-align: center;
 	cursor: pointer;
 	display: block;
-	margin:auto;
 	margin-top:20px;
 	margin-bottom:5px;
 }
 
-#request{
-	font-size:14px;
-	cursor: pointer;
+input[type=file]{
+	display: none; /* hide ugly file input, use custom button and trigger click event on file input instead */
 }
 
 .verticalCenter{
@@ -61,16 +63,7 @@ input[type=button]{
 	vertical-align: middle;
 }
 
-#loginBox{
-	vertical-align: middle;
-	display: inline-block;
-	border-radius:20px;
-	padding:30px;
-	border:1px solid rgba(0,0,0,0);
-	background-color:rgba(0,0,0,0);
-}
-
-#loginTitle{
+#title{
 	width: 100%;
 	text-align: center;
 	font-size: 40px;
@@ -80,8 +73,52 @@ input[type=button]{
 	opacity: 0;
 }
 
+/*
+ * ================================================
+ * 					Login Box
+ * ================================================
+ */
+#pageContainer{
+	vertical-align: middle;
+	display: inline-block;
+	border-radius:20px;
+	padding:30px;
+	border:1px solid rgba(0,0,0,0);
+	background-color:rgba(0,0,0,0);
+}
+
+#loginBox input[type=button]{
+	margin-left:auto;
+	margin-right:auto;
+}
+
 #loginContainer{
 	opacity: 0;
+	overflow: hidden;
+}
+
+#credentialsContainer{
+	overflow: hidden;
+	position: relative;
+}
+
+#placeholder{
+	width: 350px;
+	height: 120px;
+}
+
+#requestContainer{
+	position: absolute;
+	top:100%;
+	left:0;
+	width: 100%;
+}
+
+#loginSubcontainer{
+	position: absolute;
+	top:0;
+	left:0;
+	width: 100%;
 }
 
 .credential{
@@ -95,8 +132,17 @@ input[type=button]{
 	text-align: left;
 }
 
-#or{
-	font-size:20px;
-	margin-top:10px;
-	margin-bottom:10px;
+#request{
+	font-size:14px;
+	cursor: pointer;
+}
+
+/*
+ * ================================================
+ * 					Data Box
+ * ================================================
+ */
+#uploadBox{
+	opacity: 0;
+	display: none;
 }

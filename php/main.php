@@ -27,8 +27,17 @@ spl_autoload_register(function($class){
 // =======
 // Maps a request URI to a function or page
 // Curly brackets indicate a placeholder
-Router::page("/","login.phtml");							  // Every request to "/" gets login.phtml
-Router::func("/getUserData",array(new Data(),"getUserData")); // Every request to "/getUserData" calls Data.getUserData();
+//
+Router::page("/","home.phtml");
+Router::page("/requestAccount","home.phtml");				 
+Router::page("/chart","home.phtml");				  
+
+Router::func("/getUserData",array(new Data(),"getUserData"));
+Router::func("/requestAccount",array(new Users(),"requestAccount"));
+Router::func("/login",array(new Users(),"login"));
+
+Router::upload("/upload",array(new Data(),"uploadUserData"));
+
 Router::other(function(){
 	echo "Page not found";
 });

@@ -52,7 +52,9 @@ class Router{
 		$match = false;
 		$request = (object) array();
 		$other = !Router::$matched && $type == "OTHER";
-		if($other || $type == $_SERVER['REQUEST_METHOD']){
+		$upload = $_SERVER['REQUEST_METHOD'] == "POST" && $type == "UPLOAD";
+		
+		if($other || $upload || $type == $_SERVER['REQUEST_METHOD']){
 			if(!$other){
 				$match = Router::match($_SERVER["REQUEST_URI"],$matchURI,$request);
 			}
@@ -62,13 +64,17 @@ class Router{
 				//
 				// Gets json request payload from php://input
 				//
-				$payload = json_decode(file_get_contents("php://input"));
-				
-				//
-				// Merges URL request information and payload request information
-				//
-				if(!empty($payload)){
-					$parameters = array_merge($parameters, $payload);
+				if($upload){
+					$content = $callback($request);
+				}else{
+					$payload = json_decode(file_get_contents("php://input"));
+					
+					//
+					// Merges URL request information and payload request information
+					//
+					if(!empty($payload)){
+						$request = (object)array_merge((array)$request, (array)$payload);
+					}
 				}
 				
 				if(is_callable($callback)){
@@ -81,9 +87,15 @@ class Router{
 					call_user_func(function() use($request,$callback){
 						require($callback);
 					});
-				}
+				}					
+				
+
 			}			
 		}
+	}
+	
+	static public function upload($matchURI = "*",$callback = null){
+		Router::route("UPLOAD",$matchURI,$callback);
 	}
 
 	static public function page($matchURI = "*", $callback = null){
