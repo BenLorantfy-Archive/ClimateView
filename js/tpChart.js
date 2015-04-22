@@ -60,6 +60,26 @@ $App.DataBox = (function() {
 	//put the json data here
 	//************************
 	//************************
+	/*
+	var bla = "bla";
+	var roar = "roar";
+	
+	// converts to json string for sending
+    var options = JSON.stringify({
+	      bla:bla
+	     ,roar:roar
+    });
+    
+    var request = $.post("/getUserData",options);
+    
+    request.done(function(data){
+    	// data contains recieved json
+    });
+    
+    request.fail(function(data){
+    	// data contains error message
+    });
+    */
 	$.getJSON(JSON, function(json) {
 		$.each(json, function(key, value) {
 			dataAVG.push(value.TAVG);
