@@ -14,8 +14,23 @@ App.DataBox = function(){
 	});
 	
 	$("#seriesSelect").on("change", function(){
-		var str = "Selected " + this.options[this.selectedIndex].value;
-		$.msgBox.success(str, true);
+		var val = this.options[this.selectedIndex].value;		
+		var url = "/getUserData";		
+		var options = JSON.stringify({
+			series:val
+		});
+		var request = $.post(url,options);
+		
+		request.done(function(data){
+			// data contains recieved json
+			console.log(data);
+			var chart = new App.TemperatureChart();
+			chart.start(data);
+		});
+		
+		request.fail(function(data){
+			$.msgBox.error("Failed to get data");
+		});
 	});
 	
 	//
