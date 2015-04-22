@@ -92,13 +92,65 @@ class Data{
 		return $this->generateData($user_id, $series);
 	}
 	
-	function uploadUserData($request){
+	private function createTable($tblName){
+		$query = $this->db->prepare("CALL createUserTable(?)");
+		if(!$query) throw new Exception("prepare:" . $this->db->error);
+		if(!$query->bind_param("s",$tblName)) throw new Exception("bind:" . $this->db->error);
+		if(!$query->execute()) throw new Exception("execute:" . $this->db->error);
+		if(!$query->store_result()) throw new Exception("store:" . $this->db->error);		
+	}
+	
+	public function uploadUserData($request){
+		$valid = true;
+		
+		//
+		// Get path of uploaded file
+		// This path is only temporary, but since we're not storing the actual csv file, we don't have to worry about
+		//
 		$csvPath = $_FILES["dataUploadInput"]["tmp_name"];
 		
-		$csv = fopen($csvPath,"r");
-		$a = fgetcsv($csv);
-		fclose($csv);
+		//
+		// Create unique user table
+		//
+		$tblName = "User" . $_SESSION["id"] . "Data";
 		
-		return $a;
+		//
+		// Create user table
+		//
+		$this->createTable($tblName);
+		
+		//
+		// Open csv file
+		// 
+		$csv = fopen($csvPath,"r");
+		
+		//
+		// Iterate over each line in csv file
+		//
+		while($row = fgetcsv($csv)){
+			// Skip row if table header
+			if(!ctype_alpha($row[0])){
+			
+				//
+				// Extract required information from csv
+				//
+				$stateCode = trim($row[0]);
+				$yearMonth = trim($row[2]);
+				$pcp = trim($row[3]);
+				$cdd = trim($row[9]);
+				$hdd = trim($row[10]);
+				$tmin = trim($row[18]);
+				$tmax = trim($row[19]);
+				$tavg = trim($row[4]);
+				
+				$query = $this->db->prepare("CALL transformProc(?,?,?,?,?,?,?,?,?)");
+				if(!$query) throw new Exception("prepare:" . $this->db->error);
+				if(!$query->bind_param("siidddddd",$tblName,$stateCode,$yearMonth,$pcp,$cdd,$hdd,$tmin,$tmax,$tavg)) throw new Exception("bind:" . $this->db->error);
+				if(!$query->execute()) throw new Exception("execute:" . $this->db->error);
+				if(!$query->store_result()) throw new Exception("store:" . $this->db->error);
+			}
+		}
+		
+		return $valid;
 	}
 }

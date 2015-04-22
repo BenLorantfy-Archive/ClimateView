@@ -5,12 +5,13 @@
 -- DATE       : April 19, 2015
 --
 
--------------------------------------------------------
+-- -----------------------------------------------------
 --		Transformation sProc
--------------------------------------------------------
+-- -----------------------------------------------------
 
 -- funnction to convert F to C and inch to mm of rain
 -- returns year month
+USE ClimateView;
 DROP PROCEDURE IF EXISTS transformProc;
 DELIMITER //
 CREATE PROCEDURE transformProc(tblName VARCHAR(255), StateCode INT, YearMonth INT, PCP Float, CDD Float, HDD Float, TMIN Float, TMAX Float, TAVG Float)
@@ -48,9 +49,9 @@ DELIMITER ;
 
 
 
--------------------------------------------------------
+-- -----------------------------------------------------
 --		Create User sProc
--------------------------------------------------------
+-- -----------------------------------------------------
 
 -- function to create users data table;
 -- parameter is userid or table name.
