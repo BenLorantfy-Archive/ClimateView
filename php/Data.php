@@ -79,11 +79,11 @@ class Data{
 		return $data;
 	}
 	
-	function getUserData($request){
+	public function getUserData($request){
 		// automatically converted to json by Router
 		$user_id = $_SESSION["id"];
 		$series = $request->series;
-		
+
 		return $this->generateData($user_id, $series);
 	}
 	
