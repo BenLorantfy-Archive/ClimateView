@@ -4,10 +4,7 @@ class Data{
 
 	public function __construct()
 	{
-		$this->db = new \mysqli('localhost', 'root', 'Jratva-online1', 'climateview');
-		if($this->db->connect_errno > 0){
-			throw new Exception("Connect failed: " . $db->connect_error);
-		}
+		$this->db = Connection::connect();
 	}	
 		
 	private function generateData($user_id, $series){
