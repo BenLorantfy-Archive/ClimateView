@@ -13,6 +13,11 @@ App.DataBox = function(){
 		});
 	});
 	
+	$("#seriesSelect").on("change", function(){
+		var str = "Selected " + this.options[this.selectedIndex].value;
+		$.msgBox.success(str, true);
+	});
+	
 	//
 	// When user clicks uploadCSV button, trigger click on file input
 	// This is done so the ugly and unstyleable file input can be hidden

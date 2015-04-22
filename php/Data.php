@@ -83,10 +83,9 @@ class Data{
 	
 	function getUserData($request){
 		// automatically converted to json by Router
-		// $user_id = $_SESSION["id"]
+		$user_id = $_SESSION["id"];
 		// $series = $request->series;
 		
-		$user_id = 0;
 		$series = "temperature";
 		
 		return $this->generateData($user_id, $series);
