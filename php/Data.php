@@ -28,7 +28,7 @@ class Data{
 		if(!$query) throw new Exception($this->db->error);
 		if(!$query->execute()) throw new Exception($this->db->error);
 		if(!$query->store_result()) throw new Exception($this->db->error);
-			
+
 		$data = array();
 		if($query->num_rows >= 1){
 			switch($series)
@@ -74,8 +74,6 @@ class Data{
 
 					break;
 			}
-		}else{
-			throw new Exception($this->db->error);
 		}
 	
 		return $data;
