@@ -8,6 +8,15 @@
 		<option value="days">Heat/Cooling days</option>
 		<option value="temperature">Temperature</option>
 	</select>
+	<select id = "stateSelect">
+		<?php
+			$data = new Data();
+			$regions = $data->getRegions();
+			for($i = 0; $i < count($regions); $i++){
+				echo "<option value = '" . $regions[$i]["code"] . "'>" . $regions[$i]["name"] . "</option>";
+			}
+		?>
+	</select>	
 	
 	<select id = "stateSelect">
 		<option value="">All</option>
