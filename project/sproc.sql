@@ -13,10 +13,10 @@
 -- returns year month
 DROP PROCEDURE IF EXISTS transformProc;
 DELIMITER //
-SET FOREIGN_KEY_CHECKS = 0;
-CREATE PROCEDURE transformProc(StateCode INT, YearMonth INT, PCP Float, CDD Float, HDD Float, TMIN Float, TMAX Float, TAVG Float)
+CREATE PROCEDURE transformProc(tblName VARCHAR(255), StateCode INT, YearMonth INT, PCP Float, CDD Float, HDD Float, TMIN Float, TMAX Float, TAVG Float)
 BEGIN
-
+	SET @tableName = tblName;
+	SET FOREIGN_KEY_CHECKS = 0;
 	-- convert fahrenheit to celsius
 	SET @celsiusTMIN = ((TMIN -32)*(5/9));
 	SET @celsiusTMAX = ((TMAX -32)*(5/9));
@@ -24,17 +24,28 @@ BEGIN
 	-- convert inches into mm
 	SET @mmPCP = PCP *  25.4;	
 	
-	insert into user0data(StateCode, YearMonth, PCP, CDD, HDD, TMIN, TMAX, TAVG) 
-		values (StateCode, YearMonth, @mmPCP, CDD, HDD, @celsiusTMIN, @celsiusTMAX, @celsiusTAVGS);
+	SET @q = CONCAT('
+		INSERT INTO `' , @tableName, '` (
+			`StateCode`, `YearMonth`, `PCP`, `CDD`, `HDD`, `TMIN`, `TMAX`, `TAVG`) 
+			values  (`' , StateCode, '``' , YearMonth, '``' , @mmPCP, '``' , CDD, '`
+			`' , HDD, '``' , @celsiusTMIN, '``' , @celsiusTMAX, '``' , @celsiusTAVGS, '`
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8
+		');
+		PREPARE stmt FROM @q;
+		EXECUTE stmt;
+	DEALLOCATE PREPARE stmt;
 
-	SET @yearNum = (SELECT LEFT(YearMonth, 4) from user0data);
-	SET @monthNum = (SELECT RIGHT(YearMonth, 2) from user0data);
+	SET @yearNum = (SELECT LEFT(YearMonth, 4));
+	SET @monthNum = (SELECT RIGHT(YearMonth, 2));
 	INSERT INTO YearMonth(Year, Month) 
 		VALUES (@yearNum, @monthNum);
-		
+	
+
 SET FOREIGN_KEY_CHECKS = 1;	
 END //
 DELIMITER ;
+
+
 
 
 -------------------------------------------------------
