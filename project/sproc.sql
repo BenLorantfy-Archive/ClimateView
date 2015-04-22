@@ -1,23 +1,38 @@
+--
+-- FILE       : tables.sql
+-- PROJECT    : ClimateView - Weather Archiving and Visualization - Advanced SQL Final Project
+-- PROGRAMMER : Ben Lorantfy, Grigory Kozyrev, Kevin Li, Michael Dasilva
+-- DATE       : April 19, 2015
+--
+
+-------------------------------------------------------
+--		Transformation sProc
+-------------------------------------------------------
+
 -- funnction to convert F to C and inch to mm of rain
 -- returns year month
 DROP PROCEDURE IF EXISTS transformProc;
 DELIMITER //
-CREATE PROCEDURE transformProc(StateCode INT, YearMonth INT, PCP Float, CDD Float, HDP Float, TMIN Float, TMAX Float, TAVG Float)
+SET FOREIGN_KEY_CHECKS = 0;
+CREATE PROCEDURE transformProc(StateCode INT, YearMonth INT, PCP Float, CDD Float, HDD Float, TMIN Float, TMAX Float, TAVG Float)
 BEGIN
 
-
+	-- convert fahrenheit to celsius
 	SET @celsiusTMIN = ((TMIN -32)*(5/9));
 	SET @celsiusTMAX = ((TMAX -32)*(5/9));
 	SET @celsiusTAVG = ((TAVG -32)*(5/9));
-
-	insert into user0data(StateCode, YearMonth, PCP, CDD, HDP, TMIN, TMAX, TAVG) 
-		values (StateCode, YearMonthID, PCP, CDD, HDP, @celsiusTMIN, @celsiusTMAX, @celsiusTAVGS);
+	-- convert inches into mm
+	SET @mmPCP = PCP *  25.4;	
+	
+	insert into user0data(StateCode, YearMonth, PCP, CDD, HDD, TMIN, TMAX, TAVG) 
+		values (StateCode, YearMonth, @mmPCP, CDD, HDD, @celsiusTMIN, @celsiusTMAX, @celsiusTAVGS);
 
 	SET @yearNum = (SELECT LEFT(YearMonth, 4) from user0data);
 	SET @monthNum = (SELECT RIGHT(YearMonth, 2) from user0data);
 	INSERT INTO YearMonth(Year, Month) 
-		VALUES (yearNum, monthNum);
-	
+		VALUES (@yearNum, @monthNum);
+		
+SET FOREIGN_KEY_CHECKS = 1;	
 END //
 DELIMITER ;
 
@@ -37,6 +52,7 @@ BEGIN
         CREATE TABLE IF NOT EXISTS `' , @tableName, '` (
 		`StateCode` INT(11),
 		`YearMonth` INT(11),
+		-- Millimeters of precepitation 
 		`PCP` FLOAT,
 		`CDD` FLOAT,
 		`HDD` FLOAT,
