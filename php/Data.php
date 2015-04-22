@@ -93,8 +93,9 @@ class Data{
 		// automatically converted to json by Router
 		$user_id = $_SESSION["id"];
 		$series = $request->series;
+		$state = $request->state;
 
-		return $this->generateData($user_id, $series, "");
+		return $this->generateData($user_id, $series, $state);
 	}
 	
 	private function createTable($tblName){

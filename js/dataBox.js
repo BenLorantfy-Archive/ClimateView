@@ -13,36 +13,54 @@ App.DataBox = function(){
 		});
 	});
 	
-	$("#seriesSelect").on("change", function(){
-		var val = this.options[this.selectedIndex].value;		
+	updateChart = function(val, data){
+		console.log(data);
+		switch(val){
+			case "precipitation":
+				var chart = new App.PrecipitationChart();
+				chart.start(data);
+				break;
+			case "days":
+				var chart = new App.CHDaysChart();
+				chart.start(data);
+				break;
+			case "temperature":
+				var chart = new App.TemperatureChart();
+				chart.start(data);
+				break;
+		}			
+	};
+	
+	updateData = function(){
+		var stateSelect = document.getElementById("stateSelect");
+		var seriesSelect = document.getElementById("seriesSelect");
+		
+		var series = seriesSelect.options[seriesSelect.selectedIndex].value;		
+		var state = stateSelect.options[stateSelect.selectedIndex].value;
+		
 		var url = "/getUserData";		
 		var options = JSON.stringify({
-			series:val
+			series:series
+			,state:state
 		});
 		var request = $.post(url,options);
 		
 		request.done(function(data){
 			// data contains recieved json
-			console.log(data);
-			switch(val){
-				case "precipitation":
-					var chart = new App.PrecipitationChart();
-					chart.start(data);
-					break;
-				case "days":
-					var chart = new App.CHDaysChart();
-					chart.start(data);
-					break;
-				case "temperature":
-					var chart = new App.TemperatureChart();
-					chart.start(data);
-					break;
-			}			
+			updateChart(series, data);
 		});
 		
 		request.fail(function(data){
 			$.msgBox.error("Failed to get data");
-		});
+		});	
+	};
+	
+	$("#seriesSelect").on("change", function(){
+		updateData();
+	});
+	
+	$("#stateSelect").on("change", function(){
+		updateData();
 	});
 	
 	//
