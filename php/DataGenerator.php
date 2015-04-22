@@ -81,7 +81,7 @@ class DataGenerator{
 			throw new Exception($this->db->error);
 		}
 	
-		return json_encode($data);
+		return $data;
 	}
 }
 
