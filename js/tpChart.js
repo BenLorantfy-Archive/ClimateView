@@ -18,7 +18,7 @@ App.TemperatureChart = function() {
 		},
 		yAxis: {
 			title: {
-				text: 'Temperature'
+				text: 'Temperature (Celcius)'
 			}
 		},
 		 plotOptions: {
@@ -27,17 +27,17 @@ App.TemperatureChart = function() {
 				}
 		},
 		series: [{
-			"type": "column",
+			"type": "line",
 			"name": "AVG",
 			"color": "#ff9900",
 			"stack": true
 		},
-		{"type": "column",
+		{"type": "line",
 			"name": "MIN",
 			"color": "#d92b00",
 			"stack": true
 			}, {
-				"type": "column",
+				"type": "line",
 					"name": "MAX",
 					"color": "#51626d",
 					"stack": true
@@ -92,9 +92,10 @@ App.TemperatureChart = function() {
 		$( "#slider2" ).slider({
 			min: 2,
 			max: max_value,
+			value : max_value,
 			animate: "fast",
 			slide: function(event, ui) {
-				endValue = ui.value;
+				endValue = max_value - ui.value;
 				chartType.series[0].data  = dataAVG.slice(ui.value, startValue);
 				chartType.series[1].data  = dataMIN.slice(endValue, startValue);
 				chartType.series[2].data  = dataMAX.slice(endValue, startValue);

@@ -7,7 +7,7 @@ class Data{
 		$this->db = Connection::connect();
 	}	
 		
-	private function generateData($user_id, $series){
+	private function generateData($user_id, $series, $stateCode){
 		$sql = 'SELECT statecode, yearmonth,';	
 		switch($series)
 		{
@@ -22,6 +22,11 @@ class Data{
 				break;
 		}
 		$sql .= ' FROM user' . $user_id . 'data';
+		
+		if ($stateCode != "")
+		{
+			$sql .= ' where statecode = ' . $stateCode;
+		}
 		
 		$query = $this->db->prepare($sql);
 		
@@ -82,9 +87,10 @@ class Data{
 	function getUserData($request){
 		// automatically converted to json by Router
 		$user_id = $_SESSION["id"];
-		$series = $request->series;
+		//$series = $request->series;
+		$series = "temperature";
 		
-		return $this->generateData($user_id, $series);
+		return $this->generateData($user_id, $series, 108);
 	}
 	
 	private function createTable($tblName){

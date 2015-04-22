@@ -123,6 +123,14 @@ input[type=file]{
 	position: relative;
 }
 
+#chartRegion{
+	margin-top: 20px;
+}
+
+#slider1, #slider2{
+	margin: 10px
+}
+
 #placeholder{
 	width: 350px;
 	height: 120px;
