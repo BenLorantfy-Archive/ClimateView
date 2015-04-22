@@ -6,7 +6,9 @@ App.DataBox = function(){
 		//
 		// Upload file
 		//
+		$.msgBox.success("Uploading data",true);
 		$("#fileInputContainer input").upload("/upload",{},function(data){
+			$.msgBox.success("Data uploaded");
 			console.log(data);
 		});
 	});
