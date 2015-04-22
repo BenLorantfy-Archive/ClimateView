@@ -68,14 +68,16 @@ class Router{
 					$content = $callback($request);
 				}else{
 					$payload = json_decode(file_get_contents("php://input"));
-					
+
 					//
 					// Merges URL request information and payload request information
 					//
 					if(!empty($payload)){
 						$request = (object)array_merge((array)$request, (array)$payload);
+						var_dump($request);
 					}
 				}
+				
 				
 				if(is_callable($callback)){
 					$content = $callback($request);

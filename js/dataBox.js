@@ -24,8 +24,17 @@ App.DataBox = function(){
 		request.done(function(data){
 			// data contains recieved json
 			console.log(data);
-			var chart = new App.TemperatureChart();
-			chart.start(data);
+			switch(val){
+				case "precipitation":
+					break;
+				case "days":
+				
+					break;
+				case "temperature":
+					var chart = new App.TemperatureChart();
+					chart.start(data);
+					break;
+			}			
 		});
 		
 		request.fail(function(data){
