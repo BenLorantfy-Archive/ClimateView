@@ -81,11 +81,10 @@ class DataGenerator{
 			throw new Exception($this->db->error);
 		}
 	
-		$json = json_encode($data);
-		echo $json;
+		return json_encode($data);
 	}
 }
 
 $js = new DataGenerator();
-$js->generateData(0,"precipitation");
+echo $js->generateData(0,"precipitation");
 ?>
