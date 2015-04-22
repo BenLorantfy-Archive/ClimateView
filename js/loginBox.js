@@ -36,6 +36,39 @@ App.LoginBox = function(){
 	});
 	
 	//
+	// On enter, login
+	//
+	$("#loginSubcontainer input").keyup(function(e){
+		if(e.keyCode == 13){
+			attempLogin();
+		}
+	});
+
+	function attempLogin(){
+		var username = $("#username").val() || "";
+		var password = $("#password").val() || "";
+		
+	    var credentials = JSON.stringify({
+		     username:username
+		    ,password:password
+	    });
+	    
+	    var request = $.post("/login",credentials);
+	    
+	    request.done(function(valid){
+	    	if(valid){
+	    		onLogin.trigger();
+	    	}else{
+		    	$.msgBox.error("Invalid credentials");
+	    	}
+	    });
+	    
+	    request.fail(function(){
+	    	$.msgBox.error("An error occurred while trying to log in");
+	    });	
+	}
+		
+	//
 	// Submit account request
 	//
 	$("#loginAndRequestButton").click(function(){
@@ -44,7 +77,6 @@ App.LoginBox = function(){
 		// Make sure user clicked login
 		//
 		if($("#loginAndRequestButton").val() == "Request"){
-
 			var email = $("#email").val() || "";
 			var firstName = $("#firstName").val() || "";
 			var lastName = $("#lastName").val() || "";
@@ -65,10 +97,8 @@ App.LoginBox = function(){
 		    
 		    request.fail(function(){
 		    	$.msgBox.error("Failed to send request");
-		    });
-			
+		    });	
 		}
-
 	});
 
 	//
@@ -80,27 +110,7 @@ App.LoginBox = function(){
 		// Make sure user clicked request account
 		//
 		if($("#loginAndRequestButton").val() == "Login"){
-			var username = $("#username").val() || "";
-			var password = $("#password").val() || "";
-			
-		    var credentials = JSON.stringify({
-			     username:username
-			    ,password:password
-		    });
-		    
-		    var request = $.post("/login",credentials);
-		    
-		    request.done(function(valid){
-		    	if(valid){
-		    		onLogin.trigger();
-		    	}else{
-			    	$.msgBox.error("Invalid credentials");
-		    	}
-		    });
-		    
-		    request.fail(function(){
-		    	$.msgBox.error("An error occurred while trying to log in");
-		    });			
+			attempLogin();
 		}
 	});
 		
