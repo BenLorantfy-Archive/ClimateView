@@ -114,6 +114,7 @@ class Data{
 		// This path is only temporary, but since we're not storing the actual csv file, we don't have to worry about
 		//
 		$csvPath = $_FILES["dataUploadInput"]["tmp_name"];
+		$currentTime = date("Y-m-d H:i:s");
 		
 		//
 		// Create unique user table
@@ -156,6 +157,8 @@ class Data{
 				if(!$query->store_result()) throw new Exception("store:" . $this->db->error);
 			}
 		}
+		
+		$endTime = date("Y-m-d H:i:s");
 		
 		return $valid;
 	}

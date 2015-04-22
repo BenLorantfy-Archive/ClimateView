@@ -18,7 +18,7 @@ App.CHDaysChart = (function() {
 		},
 		yAxis: {
 			title: {
-				text: 'Days'
+				text: 'Days (Degree)'
 			}
 		},
 		 plotOptions: {
