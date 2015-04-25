@@ -1,10 +1,27 @@
 <?php
+//
+// FILE       : Users.php
+// PROJECT    : ClimateView
+// PROGRAMMER : Ben Lorantfy, Grigory Kozyrev, Kevin Li, Michael Dasilva
+// DATE       : April 19, 2015
+//
+
+//
+// NAME    : Users
+// PURPOSE : Provides functionality to manage users
+//
 class Users{
 	private $db;
 	public function __construct(){
 		$this->db = Connection::connect();
 	}
 	
+	//
+	// FUNCTION    : randomString
+	// DESCRIPTION : Gets a random string for random username generation
+	// PARAMETERS  : $length - the length of the string to generate
+	// RETURNS     : the random string
+	//
 	public function randomString($length){
 		$str = "";
 		for($i = 0; $i < $length; $i++){
@@ -20,6 +37,12 @@ class Users{
 		return $str;
 	}
 	
+	//
+	// FUNCTION    : login
+	// DESCRIPTION : Handles a request to login
+	// PARAMETERS  : $request - the request object containing username and password
+	// RETURNS     : bool : wether login succeeded or not
+	//
 	public function login($request){
 		$success = false;
 		
@@ -55,7 +78,13 @@ class Users{
 		
 		return $success;	
 	}
-	
+
+	//
+	// FUNCTION    : requestAccount
+	// DESCRIPTION : Handles a request to create an account
+	// PARAMETERS  : $request - the request object containing user info
+	// RETURNS     : bool : wether or not the request succeedded
+	//	
 	public function requestAccount($request){
 		$email = $request->email;
 		$organization = $request->organization;

@@ -1,3 +1,9 @@
+//
+// FILE       : pcpChart.js
+// PROJECT    : ClimateView
+// PROGRAMMER : Ben Lorantfy, Grigory Kozyrev, Kevin Li, Michael Dasilva
+// DATE       : April 19, 2015
+//
 App.PrecipitationChart = (function() {		
 	var Precipitation = {
 		chart: {

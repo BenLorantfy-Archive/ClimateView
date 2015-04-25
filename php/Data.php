@@ -1,4 +1,16 @@
 <?php
+//
+// FILE       : Connection.php
+// PROJECT    : ClimateView
+// PROGRAMMER : Ben Lorantfy, Grigory Kozyrev, Kevin Li, Michael Dasilva
+// DATE       : April 19, 2015
+//
+
+//
+// NAME    : Data
+// PURPOSE : Acts as a wrapper class for database operations.  Allows for the DBMS or schema to be
+//			 changed and only affect this single file.
+//
 class Data{
 	private $db;
 
@@ -7,6 +19,14 @@ class Data{
 		$this->db = Connection::connect();
 	}	
 		
+	//
+	// FUNCTION    : generateData
+	// DESCRIPTION : Returns an array of user data given and id, series, and state code
+	// PARAMETERS  : $user_id - the id of the user data belongs to
+	//             : $series - the series to return
+	//             : $stateCode - the state to filter by
+	// RETURNS     : array : the user information
+	//
 	private function generateData($user_id, $series, $stateCode){
 		if ($series == "")
 		{
@@ -90,16 +110,28 @@ class Data{
 	
 		return $data;
 	}
-	
+
+	//
+	// FUNCTION    : getUserData
+	// DESCRIPTION : Handles request to get user data
+	// PARAMETERS  : $request - request object containing user_id, series, and state
+	// RETURNS     : array : the user information
+	//	
 	public function getUserData($request){
-		// automatically converted to json by Router
 		$user_id = $_SESSION["id"];
 		$series = $request->series;
 		$state = $request->state;
 
+		// Automatically converted to JSON by Route
 		return $this->generateData($user_id, $series, $state);
 	}
-	
+
+	//
+	// FUNCTION    : createTable
+	// DESCRIPTION : Creates user table
+	// PARAMETERS  : $tblName - name of table, should be UserXTable where X is user id
+	// RETURNS     : none
+	//		
 	private function createTable($tblName){
 		$query = $this->db->prepare("CALL createUserTable(?)");
 		if(!$query) throw new Exception("prepare:" . $this->db->error);
@@ -107,7 +139,13 @@ class Data{
 		if(!$query->execute()) throw new Exception("execute:" . $this->db->error);
 		if(!$query->store_result()) throw new Exception("store:" . $this->db->error);		
 	}
-	
+
+	//
+	// FUNCTION    : uploadUserData
+	// DESCRIPTION : Handles a request to upload user data
+	// PARAMETERS  : $request - request object
+	// RETURNS     : none
+	//	
 	public function uploadUserData($request){
 		$valid = true;
 		
@@ -184,6 +222,12 @@ class Data{
 		return $valid;
 	}
 
+	//
+	// FUNCTION    : getRegions
+	// DESCRIPTION : Gets region names and codes
+	// PARAMETERS  : none
+	// RETURNS     : array of state codes and names
+	//	
 	public function getRegions(){
 		$regions = array();
 		$result = $this->db->query("SELECT * FROM State");

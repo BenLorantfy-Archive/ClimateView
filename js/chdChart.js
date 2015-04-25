@@ -1,3 +1,9 @@
+//
+// FILE       : CHDaysChart.js
+// PROJECT    : ClimateView
+// PROGRAMMER : Ben Lorantfy, Grigory Kozyrev, Kevin Li, Michael Dasilva
+// DATE       : April 19, 2015
+//
 App.CHDaysChart = (function() {					
 	var CHDays = {
 		chart: {
